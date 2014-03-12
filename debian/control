@@ -1,0 +1,13 @@
+Source: mtapoja-tools-x
+Section: utils
+Priority: extra
+Maintainer: Mika Tapojärvi <mika.tapojarvi@embelin.fi>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.3
+
+Package: mtapoja-tools-x
+Architecture: any
+Depends: ${misc:Depends}, ${dist:Depends}, meld, terminator
+Description: Metapackage for cool tools - X package
+ This package pulls all the cool tools that can be used from when you have
+ a desktop.

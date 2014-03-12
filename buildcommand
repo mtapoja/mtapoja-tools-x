@@ -1,0 +1,48 @@
+#!/bin/bash
+
+#testing:
+#debuild -us -uc -b
+
+#build for upload:
+#debuild -S -sa -k<gpgkey>
+
+#upload:
+#dput ppa:mtapoja/tools <source.changes>
+
+EVERYTHINGBEFORE=`mktemp /tmp/everything_before.XXXX`
+EVERYTHINGAFTER=`mktemp /tmp/everything_after.XXXX`
+SOURCESBEFORE=`mktemp /tmp/sources_before.XXXX`
+SOURCESAFTER=`mktemp /tmp/sources_after.XXXX`
+
+if [ -z "$1" ];
+then
+    debuild -us -uc -b
+else
+    echo "release builds"
+
+    DISTROS="precise saucy"
+
+    for DISTRO in $DISTROS;
+    do
+        pushd ..
+        ls -1 *_source.changes | sort > $SOURCESBEFORE
+        ls -1 *.* | sort > $EVERYTHINGBEFORE
+        popd
+
+        echo "-----building for $DISTRO"
+        dch -D $DISTRO -a "$DISTRO build" --force-distribution
+        debuild -S -sa -k$GPGKEY
+        git checkout debian/changelog
+
+        pushd ..
+        ls -1 *_source.changes | sort > $SOURCESAFTER
+        FILETODPUT=`diff $SOURCESBEFORE $SOURCESAFTER | tail -n 1 | sed 's/> //'`
+        dput ppa:mtapoja/tools $FILETODPUT
+
+        ls -1 *.* | sort > $EVERYTHINGAFTER
+        diff $EVERYTHINGBEFORE $EVERYTHINGAFTER | sed 's/> //' | grep -v "," | xargs rm -f
+        popd
+    done
+fi
+
+rm -rf $SOURCESBEFORE $SOURCESAFTER $EVERYTHINGBEFORE $EVERYTHINGAFTER
