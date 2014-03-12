@@ -20,7 +20,7 @@ then
 else
     echo "release builds"
 
-    DISTROS="precise saucy"
+    DISTROS="lucid"
 
     for DISTRO in $DISTROS;
     do

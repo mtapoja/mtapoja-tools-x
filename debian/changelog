@@ -1,5 +1,5 @@
-mtapoja-tools-x (0.1-1) UNRELEASED; urgency=low
+mtapoja-tools-x (0.1-1lucid1) lucid; urgency=low
 
   * Packaging and first dependencies, the first release.
 
- -- Mika Tapojärvi <mika.tapojarvi@embelin.fi>  Wed, 05 Mar 2014 11:30:26 +0200
+ -- Mika Tapojärvi <mika.tapojarvi@embelin.fi>  Wed, 12 Mar 2014 10:43:00 +0200
