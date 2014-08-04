@@ -20,7 +20,8 @@ then
 else
     echo "release builds"
 
-    DISTROS="precise saucy"
+    #DISTROS="precise saucy"
+    DISTROS="trusty"
 
     for DISTRO in $DISTROS;
     do
@@ -30,7 +31,8 @@ else
         popd
 
         echo "-----building for $DISTRO"
-        dch -D $DISTRO -a "$DISTRO build" --force-distribution
+        VER="`head -n 1 debian/changelog | sed 's/^.*(//; s/).*//'`${DISTRO}1"
+        dch  -v $VER -D $DISTRO --force-distribution "$DISTRO build"
         debuild -S -sa -k$GPGKEY
         git checkout debian/changelog
 
@@ -40,7 +42,7 @@ else
         dput ppa:mtapoja/tools $FILETODPUT
 
         ls -1 *.* | sort > $EVERYTHINGAFTER
-        diff $EVERYTHINGBEFORE $EVERYTHINGAFTER | sed 's/> //' | grep -v "," | xargs rm -f
+        diff $EVERYTHINGBEFORE $EVERYTHINGAFTER | sed 's/> //' | grep -v "," #| xargs rm -f
         popd
     done
 fi
